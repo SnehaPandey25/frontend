@@ -1,57 +1,87 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+import Home from './pages/Home';
+import CardItemLogin from './components/CardItemLogin';
+import NGOs from './pages/NGOs';
+import Landing from './pages/Volunteer/Landing';
+import ViewRequirement from './pages/Volunteer/ViewRequirement'
+import VolunteerRegister from './pages/Volunteer/VolunteerRegister';
+import VolunteerLogin from './pages/Volunteer/VolunteerLogin';
+import { VolunteerRoute } from './components/PrivateRoute';
+import AdminLogin from './pages/Admin/AdminLogin';
+import AdminRegister from './pages/Admin/AdminRegister';
+import ViewStatus from './pages/Volunteer/ViewStatus';
+import FAQs from './pages/FAQs';
+// Version 3
+import ViewNGO from './pages/NGO/ViewNGO';
+import { AdminRoute } from './components/PrivateRoute';
+import AdminLanding from './pages/Admin/AdminLanding';
+//Version 3.1
+import AddNGO from './pages/NGO/AddNGO';
+import UpdateNGO from './pages/NGO/UpdateNGO';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <>
+    <Router>
+      <div className='App'>
+          <Routes>
+            
+          {/* Regular User Routes */}
+            <Route path='/' element={<Home />} />
+            <Route path='/NGOs' element={<NGOs/>} />
+            <Route path='/LoginSignup' element={<CardItemLogin/>} />
+            <Route path='/FAQs' element={<FAQs/>} />
+          
+          
+          {/* Volunteer Routes */}
+           <Route path='/VolunteerRegister' element={<VolunteerRegister/>} />
+           <Route path='/VolunteerLogin' element={<VolunteerLogin/>} />
+           
+           <Route path='/VolunteerLanding' element={<VolunteerRoute />}>
+              <Route path='/VolunteerLanding' element={<Landing/>} /> 
+            </Route>
+            <Route path='/requirement/:adminId' element={<VolunteerRoute />}>
+               <Route path='/requirement/:adminId' element = {<ViewRequirement/>} /> 
+            </Route>
+            <Route path='/application/:ngoId' element={<VolunteerRoute />}>
+               <Route path='/application/:ngoId' element = {<ViewStatus/>} /> 
+            </Route>
+            
+
+            {/* Admin Routes */}
+            <Route path='/AdminRegister' element={<AdminRegister/>} />
+            <Route path='/AdminLogin' element={<AdminLogin/>} /> 
+
+            {/* Version 3 */}
+            {/* NGO Routes */}
+            <Route path='/ViewNGO/:ngoId' element={<AdminRoute />}>
+              <Route path='/ViewNGO/:ngoId' element={<ViewNGO/>} /> 
+            </Route> 
+
+            {/* Version 3 */}
+            <Route path='/AdminLanding' element={<AdminRoute />}>
+              <Route path='/AdminLanding' element={<AdminLanding/>} /> 
+            </Route>
+
+            {/* Version 3.1 */}
+            <Route path='/AddNGO' element={<AdminRoute />}>
+               <Route path='/AddNGO' element = {<AddNGO/>} /> 
+            </Route>
+
+            {/* Version 3.1 */}
+            <Route path='/UpdateNGO/:ngoId' element={<AdminRoute />}>
+               <Route path='/UpdateNGO/:ngoId' element = {<UpdateNGO/>} /> 
+            </Route>
+
+          </Routes>
+      </div>
+      </Router>
+      <ToastContainer/>
+    </>
   );
 }
 
