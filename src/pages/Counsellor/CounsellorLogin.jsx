@@ -1,60 +1,58 @@
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
-import {RiAdminFill} from 'react-icons/ri'
-import { useSelector, useDispatch } from 'react-redux'
-import { loginAdmin } from '../../features/admins/adminSlice'
-import { Navbar } from '../../components/Navbar'
-import '../../index.css'
 
-function AdminLogin() {
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaSignInAlt } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { Navbar } from '../../components/Navbar';
+import { loginCounsellor } from '../../features/counsellors/counsellorSlice';
+import { toast } from 'react-toastify'
+
+function CounsellorLogin() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     key: ''
-  })
-  const { email, password, key } = formData
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { isLoading } = useSelector((state) => state.admins)
+  });
+
+  const { email, password, key } = formData;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
-    }))
-  }
-  
+    });
+  };
+
   const onSubmit = (e) => {
     e.preventDefault()
-    const adminData = {
+    const counsellorData = {
       email,
       password,
       key
     }
-    dispatch(loginAdmin(adminData))
+    dispatch(loginCounsellor(counsellorData))
       .unwrap()
-      .then((admin) => {
+      .then((counsellor) => {
 
-        toast.success(`Logged in as Admin ${admin.name}`)
-        navigate('/AdminLanding')
+        toast.success(`Logged in as Counsellor ${counsellor.name}`)
+        navigate('/CounsellorLanding')
       })
       .catch(toast.error)
-  }
+  };
+
   
 
   return (
     <>
-    <Navbar/>
+      <Navbar />
       <section className='heading'>
         <h1>
-          <RiAdminFill /> Admin Login
+          <FaSignInAlt /> Counsellor Login
         </h1>
-
-        <p style={{ color: 'red', textDecoration: "underline" }} >
-          Only admins can access this page!
-        </p>
-
-      </section>  
+        <p> Please Login</p>
+      </section>
       <section className='form'>
         <form onSubmit={onSubmit}>
           <div className='form-group'>
@@ -65,7 +63,7 @@ function AdminLogin() {
               name='email'
               value={email}
               onChange={onChange}
-              placeholder='Enter your email'
+              placeholder='Enter your email address'
               required
             />
           </div>
@@ -80,8 +78,8 @@ function AdminLogin() {
               placeholder='Enter password'
               required
             />
-            </div>
-            <div className='form-group'>
+          </div>
+          <div className='form-group'>
             <input
               type='String'
               className='form-control'
@@ -89,17 +87,17 @@ function AdminLogin() {
               name='key'
               value={key}
               onChange={onChange}
-              placeholder='Enter secret key shared by company'
+              placeholder='Enter secret key'
               required
             />
           </div>
           <div className='form-group'>
-            <button className='btn btn-block'>Submit</button>
+            <button type='submit' className='btn btn-block'>Submit</button>
           </div>
         </form>
       </section>
     </>
-  )
+  );
 }
- 
-export default AdminLogin
+
+export default CounsellorLogin;

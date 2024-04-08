@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit'
 import adminService from './adminService'
-
 import { extractErrorMessage } from '../../utils'
 
 // Get admin from localstorage
@@ -32,11 +31,12 @@ export const loginAdmin = createAsyncThunk('admin/login', async (admin, thunkAPI
   }
 })
 
-// Logout user
+// Logout admin
 export const logoutAdmin = createAction('admin/logout', () => {
   adminService.logoutAdmin()
   return {}
 })
+
 
 export const adminSlice = createSlice({
   name: 'admin',

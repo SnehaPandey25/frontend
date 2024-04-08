@@ -2,11 +2,9 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { FaSignInAlt } from 'react-icons/fa'
-import { useSelector, useDispatch } from 'react-redux'
+import {  useDispatch } from 'react-redux'
 import { loginVolunteer } from '../../features/volunteers/volunteerSlice'
-import Spinner from '../../components/Spinner'
 import { Navbar } from '../../components/Navbar'
-//Version 3
 import '../../index.css'
 
 
@@ -18,7 +16,7 @@ function VolunteerLogin() {
   const { email, password } = formData
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { isLoading } = useSelector((state) => state.volunteers)
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -40,9 +38,7 @@ function VolunteerLogin() {
       })
       .catch(toast.error)
   }
-  if (isLoading) {
-    return <Spinner />
-  }
+  
 
   return (
     <>

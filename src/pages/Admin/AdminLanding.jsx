@@ -1,15 +1,12 @@
-//Version 3 - temporary
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-
-// Version 3
-import React, { useState } from "react";
-import { Navbar } from '../../components/Navbar';
-import {toast} from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
 import { getNGOs, deleteNGO } from '../../features/ngos/ngoSlice';
+import React, { useState } from "react";
+import {toast} from 'react-toastify'
+import AdminHeader from '../../components/Admin/AdminHeader'
 import '../../indexs.css';
+import { deleteRequirement, getRequirements } from '../../features/requirements/requirementSlice';
 
 function AdminLanding() {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -43,24 +40,39 @@ function AdminLanding() {
         }
     };
     const { ngos } = useSelector((state) => state.ngos);
+    const { requirements } = useSelector((state)=> state.requirements);
     const adminId = useSelector(state => state.admins.admin?._id); // Using optional chaining to avoid errors
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     useEffect(() => {
         dispatch(getNGOs());
+        dispatch(getRequirements());
     }, [dispatch]);
 
     if (!adminId) {
         return <div>No admin found.</div>;
     }
 
-    if (!ngos || ngos.length === 0) {
-        return <div>Loading...</div>; // Display a loading indicator while waiting for data - Jannat 
-    }
 
     const filteredNGO = ngos.filter(item => item.admin === adminId);
+    const filteredRequirement = requirements.filter(item => item.admin === adminId);
+    
+    const handleDelete = () => {
+        dispatch(deleteRequirement(filteredRequirement[0]._id))
+          .then((response) => {
+            console.log(response)
+            toast.success('Requirement Deleted Successfully');
+            window.location.reload()
+            navigate('/AdminLanding')
+          })
+          .catch((error) => {
+            toast.error(error.message);
+          });
+      }
 
-    const handleDelete = (ngoId) => {
+      const handleNGODelete = (ngoId) => {
         console.log(ngoId)
         dispatch(deleteNGO(ngoId))
           .then((response) => {
@@ -75,9 +87,10 @@ function AdminLanding() {
       }
 
 
+
     return (
         <div className="admin-landing-container">
-            <Navbar />
+            <AdminHeader />
             <h1 className="welcome-text">Welcome, Admin</h1>
             <div className="button-container">
                 <button className="action-button" onClick={() => openModal("NGO")}>
@@ -104,8 +117,7 @@ function AdminLanding() {
                     {filteredNGO.length === 0 ? (
                         // When no NGOs are found for the admin
                         <>
-                        {/* Version -3  */}
-                           <Link to={'/AddNGO/'} className='btn btn-reverse btn-sm'>
+                            <Link to={'/AddNGO/'} className='btn btn-reverse btn-sm'>
                                             Add 
                             </Link>
                         </>
@@ -118,7 +130,7 @@ function AdminLanding() {
                                         <Link to={`/ViewNGO/${ngo._id}`} className='btn btn-reverse btn-sm'>
                                             View
                                         </Link>
-                                        <button onClick={() => handleDelete(ngo._id)} className="btn btn-sm btn-danger mx-3">Delete</button>
+                                        <button onClick={() => handleNGODelete(ngo._id)} className="btn btn-sm btn-danger mx-3">Delete</button>
 
                                         <Link to={`/UpdateNGO/${ngo._id}`} className='btn btn-reverse btn-sm'>
                                             Update  
@@ -133,20 +145,59 @@ function AdminLanding() {
                     <>
                         <>
                             <div>
-                                <button className="btn btn-sm btn-danger mx-3">Delete Requirements</button>
-                                <button onClick={() => handleButtonClick("add")}>Add Requirements</button>
-                                <button onClick={() => handleButtonClick("view")}>View Requirements</button>
-                                <button onClick={() => handleButtonClick("volunteer requests")}>Volunteer Requests</button>
-                            </div>
-        
+                            {filteredRequirement.length === 0 ? (
+                        // When no Requirements are found for the admin
+                        <>
+                                {filteredNGO.map(ngo => (
+                                    <div key={ngo._id}>
+                                        <Link to={`/ViewRequests/${ngo._id}`} className='btn btn-reverse btn-sm'>
+                                            View Requests
+                                        </Link>
+                                        <Link to={`/ViewVolunteers/${ngo._id}`} className='btn btn-reverse btn-sm'>
+                                            View Volunteers
+                                        </Link>
+                                        <Link to={`/AddRequirements/`} className='btn btn-reverse btn-sm'>
+                                            Add Requirements
+                                        </Link>
+                                        <Link to={`/requirement/${adminId}`} className='btn btn-reverse btn-sm'>
+                                            View Requirements
+                                        </Link>
+                                    </div>
+                                    
+                                ))}
                         </>
-                  
+                    ) : (
+                        // When Requirements are found for the admin
+                        <>
+                            <div>
+                            <button onClick={handleDelete} className="btn btn-sm btn-danger mx-3">Delete Requirements</button>
+                                {filteredNGO.map(ngo => (
+                                    <div key={ngo._id}>
+                                        <Link to={`/ViewRequests/${ngo._id}`} className='btn btn-reverse btn-sm'>
+                                            View Requests
+                                        </Link>
+                                        <Link to={`/ViewVolunteers/${ngo._id}`} className='btn btn-reverse btn-sm'>
+                                            View Volunteers
+                                        </Link>
+                                        <Link to={`/requirement/${adminId}`} className='btn btn-reverse btn-sm'>
+                                            View Requirements
+                                        </Link>
+                                    </div>
+                                    
+                                ))}
+                            </div>
+                        </>
+                    )}
+                        </div>
+                        </>
                     </>)}
                     { selectedButton !== "VIEW CASE" && selectedButton !== "VOLUNTEER" && selectedButton!=="NGO"  && (
                     <>
                         <>
                             <div>
-                                <button onClick={() => handleButtonClick("register")}>Register Counsellor</button>
+                            <Link to='/CounsellorRegister' className='btn btn-reverse btn-sm'>
+                                            Register Counsellor
+                            </Link>
                                 <button onClick={() => handleButtonClick("view")}>View Counsellor</button>
                             </div>
         

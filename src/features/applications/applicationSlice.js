@@ -1,5 +1,3 @@
-//Version 2
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import applicationService from './applicationService'
 
@@ -31,14 +29,13 @@ export const createApplication = createAsyncThunk(
     }
   }
 )
-
-// Get volunteer application
-export const getApplication = createAsyncThunk(
-  'applications/get',
-  async (ngoId, thunkAPI) => {
+// Get volunteer Applications
+export const getApplications = createAsyncThunk(
+  'applications/getAll',
+  async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().volunteers.volunteer.token
-      return await applicationService.getApplication(ngoId, token)
+      return await applicationService.getApplications(token)
     } catch (error) {
       const message =
         (error.response &&
@@ -72,15 +69,15 @@ export const applicationSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
-      .addCase(getApplication.pending, (state) => {
+      .addCase(getApplications.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(getApplication.fulfilled, (state, action) => {
+      .addCase(getApplications.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.application = action.payload
+        state.applications = action.payload
       })
-      .addCase(getApplication.rejected, (state, action) => {
+      .addCase(getApplications.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
