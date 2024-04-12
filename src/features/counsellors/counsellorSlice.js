@@ -38,6 +38,26 @@ export const logoutCounsellor = createAction('counsellor/logout', () => {
   return {}
 })
 
+//Version 3.2
+// Get own details
+export const getCounsellor = createAsyncThunk(
+  'counsellor/get',
+  async (counsellorId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().counsellors.counsellor.token
+      return await counsellorService.getCounsellor(counsellorId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 
 export const counsellorSlice = createSlice({
   name: 'counsellor',
@@ -68,6 +88,20 @@ export const counsellorSlice = createSlice({
       })
       .addCase(loginCounsellor.rejected, (state) => {
         state.isLoading = false
+      })
+      //Version 3.2
+      .addCase(getCounsellor.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getCounsellor.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.counsellor = action.payload
+      })
+      .addCase(getCounsellor.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
       })
   },
 })
