@@ -1,33 +1,32 @@
 import React from 'react';
 import {  Link } from 'react-router-dom';
 import CounsellorHeader from '../../components/Counsellor/CounsellorHeader';
-import '../../indexs.css'; 
-//Version 3.2
+import '../../indexs.css';  
 import { useSelector } from 'react-redux';
 
 function CounsellorLanding() {
-
-  //Version 3.2
-  const { counsellor } = useSelector((state) => state.counsellors)
-
+  const counsellorId = useSelector(state => state.counsellors.counsellor?._id);
   return (
     <>
       <CounsellorHeader />
       <div className="counsellor-case-landing">
         <h1>Welcome, Counsellor</h1>
         <div className="options-container">
-        <button className="option-button">Update Your Details</button>
-        {/* Version 3.2 */}
-        <div key={counsellor._id}>
-        <Link to={`/ViewCounsellor/${counsellor._id}`} className='btn btn-reverse btn-sm'>
-                View Your Details
+        
+        <Link to={`/UpdateCounsellor/${counsellorId}`} className='btn btn-reverse btn-sm'>
+              Update Your Details
         </Link>
-        </div>
+
+        <Link to='/ViewCounsellor' className='btn btn-reverse btn-sm'>
+          View Your Details
+        </Link>
 
         <Link to='/CaseRegister' className='btn btn-reverse btn-sm'>
                 Register Case
         </Link>
-        <button className="option-button">Case Actions</button>
+        <Link to={`/CaseAction/${counsellorId}`} className='btn btn-reverse btn-sm'>
+                Case Actions
+        </Link>
         </div>
     </div>
     </>

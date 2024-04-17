@@ -1,8 +1,5 @@
-import { useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { useSelector, useDispatch } from 'react-redux'
-import { getCounsellor } from '../../features/counsellors/counsellorSlice'
-import { useParams} from 'react-router-dom'
+//VERSION 4
+import { useSelector } from 'react-redux'
 import Spinner from '../../components/Spinner'
 import { Navbar } from '../../components/Navbar'
 
@@ -10,14 +7,6 @@ import { Navbar } from '../../components/Navbar'
 function ViewCounsellor() {
   
   const { counsellor } = useSelector((state) => state.counsellors)
-
-  const dispatch = useDispatch()
-  const { counsellorId } = useParams()
-
-  useEffect(() => {
-    dispatch(getCounsellor(counsellorId)).unwrap().catch(toast.error)
-  }, [counsellorId, dispatch])
-
 
   if (!counsellor) {
     return <Spinner />

@@ -29,6 +29,10 @@ import CounsellorLanding from './pages/Counsellor/CounsellorLanding';
 import CaseRegister from './pages/Case/CaseRegister'
 import CaseLogin from './pages/Case/CaseLogin';
 import CaseLanding from './pages/Case/CaseLanding';
+import CaseAction from './pages/Counsellor/CaseAction';
+import UpdateCase from './pages/Counsellor/UpdateCase';
+import AddRemarks from './pages/Counsellor/AddRemarks'
+import UpdateCounsellor from './pages/Counsellor/UpdateCounsellor'
 import ViewCounsellor from './pages/Counsellor/ViewCounsellor';
 
 function App() {
@@ -101,12 +105,29 @@ function App() {
           <Route path='/CounsellorLanding' element={<CounsellorRoute />}>
               <Route path='/CounsellorLanding' element={<CounsellorLanding />} /> 
           </Route>
+          <Route path='/UpdateCounsellor/:counsellorId' element={<CounsellorRoute />}>
+              <Route path='/UpdateCounsellor/:counsellorId' element={<UpdateCounsellor />} /> 
+          </Route>
+          <Route path='/ViewCounsellor' element={<CounsellorRoute />}>
+              <Route path='/ViewCounsellor' element={<ViewCounsellor />} /> 
+          </Route>
+          {/* Version 4.1 */}
+          <Route path='/UpdateCounsellor/:counsellorId' element={<CounsellorRoute />}>
+               <Route path='/UpdateCounsellor/:counsellorId' element = {<UpdateCounsellor/>} /> 
+            </Route>
+
+          {/* Counsellor-Case Routes */}
           <Route path='/CaseRegister' element={<CounsellorRoute />}>
               <Route path='/CaseRegister' element={<CaseRegister />} /> 
           </Route>
-          {/* Version 3.2 */}
-          <Route path='/ViewCounsellor/:counsellorId' element={<CounsellorRoute />}>
-              <Route path='/ViewCounsellor/:counsellorId' element={<ViewCounsellor />} /> 
+          <Route path='/CaseAction/:counsellorId' element={<CounsellorRoute />}>
+              <Route path='/CaseAction/:counsellorId' element={<CaseAction />} /> 
+          </Route>
+          <Route path='/UpdateCase/:actionId' element={<CounsellorRoute />}>
+              <Route path='/UpdateCase/:actionId' element={<UpdateCase />} /> 
+          </Route>
+          <Route path='/AddRemarks/:actionId' element={<CounsellorRoute />}>
+              <Route path='/AddRemarks/:actionId' element={<AddRemarks />} /> 
           </Route>
 
           {/* Case Routes   */}
